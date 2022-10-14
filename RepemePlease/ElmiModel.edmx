@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ElmiDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="employee_id" />
+          </Key>
+          <Property Name="employee_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_login" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="employee_password" Type="nvarchar" MaxLength="24" Nullable="false" />
+        </EntityType>
+        <EntityType Name="goods">
+          <Key>
+            <PropertyRef Name="good_article" />
+          </Key>
+          <Property Name="good_article" Type="int" Nullable="false" />
+          <Property Name="good_description" Type="nvarchar" MaxLength="24" Nullable="false" />
+          <Property Name="good_count" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ordered_good" Type="int" Nullable="false" />
+          <Property Name="order_count" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="supplies">
+          <Key>
+            <PropertyRef Name="supply_id" />
+          </Key>
+          <Property Name="supply_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="supplied_good" Type="int" Nullable="false" />
+          <Property Name="supply_count" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_orders_goods">
+          <End Role="goods" Type="Self.goods" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="goods">
+              <PropertyRef Name="good_article" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="ordered_good" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supplies_goods">
+          <End Role="goods" Type="Self.goods" Multiplicity="1" />
+          <End Role="supplies" Type="Self.supplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="goods">
+              <PropertyRef Name="good_article" />
+            </Principal>
+            <Dependent Role="supplies">
+              <PropertyRef Name="supplied_good" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ElmiDBModelContainer">
+          <EntitySet Name="employees" EntityType="Self.employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="goods" EntityType="Self.goods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orders" EntityType="Self.orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="supplies" EntityType="Self.supplies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_orders_goods" Association="Self.FK_orders_goods">
+            <End Role="goods" EntitySet="goods" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supplies_goods" Association="Self.FK_supplies_goods">
+            <End Role="goods" EntitySet="goods" />
+            <End Role="supplies" EntitySet="supplies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ElmiDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="employee_id" />
+          </Key>
+          <Property Name="employee_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employee_login" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="employee_password" Type="String" MaxLength="24" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="goods">
+          <Key>
+            <PropertyRef Name="good_article" />
+          </Key>
+          <Property Name="good_article" Type="Int32" Nullable="false" />
+          <Property Name="good_description" Type="String" MaxLength="24" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="good_count" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="orders" Relationship="Self.FK_orders_goods" FromRole="goods" ToRole="orders" />
+          <NavigationProperty Name="supplies" Relationship="Self.FK_supplies_goods" FromRole="goods" ToRole="supplies" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ordered_good" Type="Int32" Nullable="false" />
+          <Property Name="order_count" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="goods" Relationship="Self.FK_orders_goods" FromRole="orders" ToRole="goods" />
+        </EntityType>
+        <EntityType Name="supplies">
+          <Key>
+            <PropertyRef Name="supply_id" />
+          </Key>
+          <Property Name="supply_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="supplied_good" Type="Int32" Nullable="false" />
+          <Property Name="supply_count" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="goods" Relationship="Self.FK_supplies_goods" FromRole="supplies" ToRole="goods" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_orders_goods">
+          <End Role="goods" Type="Self.goods" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="goods">
+              <PropertyRef Name="good_article" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="ordered_good" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_supplies_goods">
+          <End Role="goods" Type="Self.goods" Multiplicity="1" />
+          <End Role="supplies" Type="Self.supplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="goods">
+              <PropertyRef Name="good_article" />
+            </Principal>
+            <Dependent Role="supplies">
+              <PropertyRef Name="supplied_good" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ElmiDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="employees" EntityType="Self.employees" />
+          <EntitySet Name="goods" EntityType="Self.goods" />
+          <EntitySet Name="orders" EntityType="Self.orders" />
+          <EntitySet Name="supplies" EntityType="Self.supplies" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_orders_goods" Association="Self.FK_orders_goods">
+            <End Role="goods" EntitySet="goods" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_supplies_goods" Association="Self.FK_supplies_goods">
+            <End Role="goods" EntitySet="goods" />
+            <End Role="supplies" EntitySet="supplies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ElmiDBModelContainer" CdmEntityContainer="ElmiDBEntities">
+          <EntitySetMapping Name="employees">
+            <EntityTypeMapping TypeName="ElmiDBModel.employees">
+              <MappingFragment StoreEntitySet="employees">
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+                <ScalarProperty Name="employee_login" ColumnName="employee_login" />
+                <ScalarProperty Name="employee_password" ColumnName="employee_password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="goods">
+            <EntityTypeMapping TypeName="ElmiDBModel.goods">
+              <MappingFragment StoreEntitySet="goods">
+                <ScalarProperty Name="good_article" ColumnName="good_article" />
+                <ScalarProperty Name="good_description" ColumnName="good_description" />
+                <ScalarProperty Name="good_count" ColumnName="good_count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="ElmiDBModel.orders">
+              <MappingFragment StoreEntitySet="orders">
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="ordered_good" ColumnName="ordered_good" />
+                <ScalarProperty Name="order_count" ColumnName="order_count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="supplies">
+            <EntityTypeMapping TypeName="ElmiDBModel.supplies">
+              <MappingFragment StoreEntitySet="supplies">
+                <ScalarProperty Name="supply_id" ColumnName="supply_id" />
+                <ScalarProperty Name="supplied_good" ColumnName="supplied_good" />
+                <ScalarProperty Name="supply_count" ColumnName="supply_count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ElmiDBModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
